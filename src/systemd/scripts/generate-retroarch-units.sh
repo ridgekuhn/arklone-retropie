@@ -6,47 +6,15 @@
 # Generate systemd path units for save directories in all retroarch.cfg instances
 #
 # @param [$1] {boolean} Optionally delete all retroarch path units first
-#
-# @returns 65 for ArkOS-specific exFAT bug
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t loadConfig)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/loadConfig.sh"
 [[ "$(type -t newPathUnit)" = "function" ]] || source "${ARKLONE[installDir]}/src/systemd/scripts/functions/newPathUnit.sh"
 [[ "$(type -t newPathUnitsFromDir)" = "function" ]] || source "${ARKLONE[installDir]}/src/systemd/scripts/functions/newPathUnitsFromDir.sh"
 
-# @todo ArkOS-specific exFAT bug
-#		A bug in ArkOS prevents systemd path units
-#		from being able to reliably watch an exFAT partition.
-#		This means automatic syncing will not work if
-#		"savefiles_in_content_dir" or "savestates_in_content_dir"
-#		are enabled.
-#
-#		User will still be able to manually sync.
-#
-#		@see dialogs/settings.sh
-#		@see https://github.com/christianhaitian/arkos/issues/289
-
 # Get array of all retroarch.cfg instances
 RETROARCHS=(${ARKLONE[retroarchCfg]})
 
-# Check if an exFAT partition named EASYROMS is present
-if [[ "$(lsblk -f | grep "EASYROMS" | cut -d ' ' -f 2)" = "exfat" ]]; then
-    # Loop through all retroarch.cfg instances
-    for retroarchCfg in ${RETROARCHS[@]}; do
-        # Store retroarch.cfg settings in an array
-        declare -A r
-        loadConfig "${retroarchCfg}" r "savefiles_in_content_dir|savestates_in_content_dir"
-
-        # Check for incompatible settings
-        if
-            [[ "${r[savefiles_in_content_dir]}" = "true" ]] \
-            || [[ "${r[savestates_in_content_dir]}" = "true" ]]
-        then
-            echo "ERROR: Incompatible settings. Cannot generate retroarch path units."
-            exit 65
-        fi
-    done
-fi
 
 # @todo We should also be able to support screenshots and systemfiles
 #		because they use the same naming scheme in retroarch.cfg
@@ -125,9 +93,8 @@ for retroarchCfg in ${RETROARCHS[@]}; do
     done
 
     # Process the retroarch content root
-    # @todo ArkOS-specific
     if [[ ${r[content_directory_filter]} ]]; then
-        newPathUnitsFromDir "${ARKLONE[retroarchContentRoot]}" "${retroarchBasename}/$(basename "${ARKLONE[retroarchContentRoot]}")" 1 true "${r[content_directory_filter]%%|}" "${ARKLONE[ignoreDir]}/arkos-retroarch-content-root.ignore"
+        newPathUnitsFromDir "${ARKLONE[retroarchContentRoot]}" "${retroarchBasename}/$(basename "${ARKLONE[retroarchContentRoot]}")" 1 true "${r[content_directory_filter]%%|}" "${ARKLONE[ignoreDir]}/retropie-retroarch-content-root.ignore"
     fi
 
     # Unset r to prevent conflicts on next loop

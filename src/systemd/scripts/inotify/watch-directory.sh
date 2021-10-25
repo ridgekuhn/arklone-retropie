@@ -11,7 +11,7 @@
 #
 # @param [$2] Optional list of REGEX patterns to pass to inotifywait
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 PATH_UNIT="${1}"
 EXCLUDES=(${@:2})

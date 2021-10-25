@@ -4,19 +4,17 @@
 # Released under GNU GPLv3 license, see LICENSE.md.
 
 # Set defaults built-ins if run as root
-[[ $SUDO_USER ]] && USER="${SUDO_USER}" || [[ $USER ]] || USER="ark"
+[[ $SUDO_USER ]] && USER="${SUDO_USER}" || [[ $USER ]] || USER="$(getent passwd "1000" | cut -d ':' -f 1)"
 HOME="/home/${USER}"
 
-[[ "$(type -t loadConfig)" = "function" ]] || source "/opt/arklone/src/functions/loadConfig.sh"
-[[ "$(type -t getEnabledUnits)" = "function" ]] || source "/opt/arklone/src/systemd/scripts/functions/getEnabledUnits.sh"
+[[ "$(type -t loadConfig)" = "function" ]] || source "/opt/retropie/supplementary/arklone/src/functions/loadConfig.sh"
+[[ "$(type -t getEnabledUnits)" = "function" ]] || source "/opt/retropie/supplementary/arklone/src/systemd/scripts/functions/getEnabledUnits.sh"
 
 # Set default settings
 declare -A ARKLONE
 ARKLONE=(
-    [installDir]="/opt/arklone"
+    [installDir]="/opt/retropie/supplementary/arklone"
     [userCfgDir]="${HOME}/.config/arklone"
-    # @todo ArkOS-specific
-    # [backupDir]="/roms/backup"
 
     # arklone config file
     [userCfg]="${ARKLONE[userCfgDir]}/arklone.cfg"
@@ -25,8 +23,7 @@ ARKLONE=(
     [dirtyBoot]="${ARKLONE[userCfgDir]}/.dirtyboot"
 
     # rclone
-    # @todo ArkOS-specific
-    # [rcloneConf]="/home/ark/.config/rclone/rclone.conf"
+    # [rcloneConf]="~/.config/rclone/rclone.conf"
     # [remote]=""
     [filterDir]="${ARKLONE[installDir]}/src/rclone/filters"
 
@@ -34,9 +31,8 @@ ARKLONE=(
     # [log]="/dev/shm/arklone.log"
 
     # RetroArch
-    # @todo ArkOS-specific
-    # [retroarchContentRoot]="/roms"
-    # [retroarchCfg]="/home/user/.config/retroarch/retroarch.cfg"
+    # [retroarchContentRoot]="~/RetroPie/roms"
+    # [retroarchCfg]="~/.config/retroarch/retroarch.cfg"
 
     # systemd
     [enabledUnits]="$(getEnabledUnits)"
@@ -58,7 +54,6 @@ if [[ ! -f "${ARKLONE[userCfg]}" ]]; then
     fi
 
     # Copy userCfg back to default path
-    # @todo Should we symlink this to ${ARKLONE[backupDir]} for ArkOS users?
     cp "${ARKLONE[installDir]}/src/arklone.cfg.orig" "${ARKLONE[userCfg]}"
     chown "${USER}":"${USER}" "${ARKLONE[userCfg]}"
 fi

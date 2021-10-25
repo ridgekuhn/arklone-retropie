@@ -3,7 +3,7 @@
 # by ridgek
 # Released under GNU GPLv3 license, see LICENSE.md.
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 [[ "$(type -t rcloneRemoteCheckScreen)" = "function" ]] || source "${ARKLONE[installDir]}/src/dialogs/screens/rclone/rcloneRemoteCheckScreen.sh"
 [[ "$(type -t regenRAunitsScreen)" = "function" ]] || source "${ARKLONE[installDir]}/src/dialogs/screens/systemd/regenRAunitsScreen.sh"

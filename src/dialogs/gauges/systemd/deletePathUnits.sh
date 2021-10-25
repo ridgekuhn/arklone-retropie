@@ -3,12 +3,12 @@
 # by ridgek
 # Released under GNU GPLv3 license, see LICENSE.md.
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 OLD_UNITS=($(find "${ARKLONE[unitsDir]}/arkloned-retroarch"*".auto.path" 2>/dev/null))
 
 while read line; do
-    if grep -E "^removed '/opt/arklone/src/systemd/units/arkloned-retroarch-.*.auto.path" <<<"${line}" >/dev/null 2>&1; then
+    if grep -E "^removed '/opt/retropie/supplementary/arklone/src/systemd/units/arkloned-retroarch-.*.auto.path" <<<"${line}" >/dev/null 2>&1; then
         unit=$(sed -e "s|^removed '||" -e "s/'$//" <<<"${line}")
 
         for i in "${!OLD_UNITS[@]}"; do

@@ -10,7 +10,7 @@
 #
 # @param [$1] Optionally keep arkloned-receive-saves-boot.service if true
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 KEEP_BOOT_SERVICE="${1}"
 

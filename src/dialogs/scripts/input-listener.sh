@@ -5,45 +5,67 @@
 
 # Listen to input and convert to keycodes for command input
 #
-# Uses oga_controls
-# @see https://github.com/christianhaitian/oga_controls
-#
 # @param $1 Absolute path to the command to run
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 RUNCOMMAND="${1}"
 
-# Get device type
-# Anbernic RG351x
-if [[ -e "/dev/input/by-path/platform-ff300000.usb-usb-0:1.2:1.0-event-joystick" ]]; then
-  PARAM_DEVICE="anbernic"
+# Path to joy2key wrapper
+# Replaces rp_isInstalled and rp_getInstallPath functions in upstream version,
+# since we are not using retropie_packages.sh
+# @see https://github.com/RetroPie/RetroPie-Setup/blob/b3acb001fcf6276a2ef5c5b4caca135b399797f8/scriptmodules/helpers.sh#L1253
+JOY2KEY_WRAPPER="/opt/retropie/admin/joy2key/joy2key"
 
-# ODROID Go 2
-elif [[ -e "/dev/input/by-path/platform-odroidgo2-joypad-event-joystick" ]]; then
-    if [[ ! -z $(cat /etc/emulationstation/es_input.cfg | grep "190000004b4800000010000001010000") ]]; then
-      PARAM_DEVICE="oga"
-    else
-      PARAM_DEVICE="rk2020"
+# Override joystick autodetection
+# @see https://github.com/RetroPie/RetroPie-Setup/blob/b3acb001fcf6276a2ef5c5b4caca135b399797f8/scriptmodules/admin/joy2key.sh#L49
+# __joy2key_dev="/dev/input/js0"
+
+#########
+# HELPERS
+#########
+
+## @fn joy2keyStart()
+## @param left mapping for left
+## @param right mapping for right
+## @param up mapping for up
+## @param down mapping for down
+## @param but1 mapping for button 1
+## @param but2 mapping for button 2
+## @param but3 mapping for button 3
+## @param butX mapping for button X ...
+## @brief Start joy2key process in background to map joystick presses to keyboard
+## @details Arguments are curses capability names or hex values starting with '0x'
+## see: http://pubs.opengroup.org/onlinepubs/7908799/xcurses/terminfo.html
+function joy2keyStart() {
+    # don't start on SSH sessions
+    # (check for bracket in output - ip/name in brackets over a SSH connection)
+    [[ "$(who -m)" == *\(* ]] && return
+
+    local params=("$@")
+
+    # if joy2key is installed, run it
+    if [[ -f "${JOY2KEY_WRAPPER}" ]]; then
+        "${JOY2KEY_WRAPPER}" start "${params[@]}" 2>/dev/null && return 0
     fi
 
-# ODROID Go 3
-elif [[ -e "/dev/input/by-path/platform-odroidgo3-joypad-event-joystick" ]]; then
-  PARAM_DEVICE="ogs"
+    return 1
+}
 
-# Gameforce Chi
-elif [[ -e "/dev/input/by-path/platform-gameforce-gamepad-event-joystick" ]]; then
-  PARAM_DEVICE="chi"
-fi
+## @fn joy2keyStop()
+## @brief Stop previously started joy2key process.
+function joy2keyStop() {
+    # if joy2key is installed, stop it
+    if [[ -f "${JOY2KEY_WRAPPER}" ]]; then
+        "${JOY2KEY_WRAPPER}" stop
+    fi
+}
 
-if [[ $PARAM_DEVICE ]]; then
-    # Change to bundled oga_controls directory
-    # so it can find oga_controls_settings.txt
-    cd "${ARKLONE[installDir]}/vendor/oga_controls"
+######
+# MAIN
+######
 
-    # Run oga_controls in the background
-    sudo ./oga_controls "${RUNCOMMAND}" "${PARAM_DEVICE}" &
-fi
+joy2keyStart
 
 # Run/source the command in a subshell so it has access to ${ARKLONE[@]}
 # but can still use `exit` without exiting this script
@@ -51,10 +73,7 @@ fi
 
 EXIT_CODE=$?
 
-# Teardown
-if [[ $PARAM_DEVICE ]]; then
-    sudo kill -s SIGKILL $(pidof oga_controls)
-fi
+joy2keyStop
 
 exit $EXIT_CODE
 

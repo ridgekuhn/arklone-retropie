@@ -1,6 +1,5 @@
-backupDir = "/roms/backup"
-retroarchContentRoot = "/roms"
-retroarchCfg = "~/.config/retroarch/retroarch.cfg ~/.config/retroarch32/retroarch.cfg"
+retroarchContentRoot = "~/RetroPie/roms"
+retroarchCfg = "/opt/retropie/configs/all/retroarch.cfg"
 log = "/dev/shm/arklone.log"
 rcloneConf = "~/.config/rclone/rclone.conf"
 remote = ""

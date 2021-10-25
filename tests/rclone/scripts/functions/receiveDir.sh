@@ -3,7 +3,7 @@
 # by ridgek
 # Released under GNU GPLv3 license, see LICENSE.md.
 
-source "/opt/arklone/src/config.sh"
+source "/opt/retropie/supplementary/arklone/src/config.sh"
 source "${ARKLONE[installDir]}/src/rclone/scripts/functions/receiveDir.sh"
 
 # Mock local directory tree

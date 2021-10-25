@@ -17,7 +17,7 @@
 #
 # @returns rclone exit code
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t getRootInstanceNames)" = "function" ]] || source "${ARKLONE[installDir]}/src/systemd/scripts/functions/getRootInstanceNames.sh"
 
 # Exit if argument is invalid

@@ -1,6 +1,6 @@
 # arklone developer docs #
 
-arklone should be installed at `/opt/arklone`
+arklone should be installed at `/opt/retropie/supplementary/arklone`
 
 Submissions must follow the [RetroPie Shell Style Guide](https://retropie.org.uk/docs/Shell-Style-Guide/).
 
@@ -47,7 +47,7 @@ arklone uses systemd path units for watching directories and launching scripts. 
 **arkloned@.service:**
 
 ```
-ExecStart=/opt/arklone/src/rclone/scripts/send-and-receive-saves.sh "send" %I
+ExecStart=/opt/retropie/supplementary/arklone/src/rclone/scripts/send-and-receive-saves.sh "send" %I
 ```
 
 
@@ -124,7 +124,7 @@ After=network-online.target arkloned-receive-saves-boot.service
 
 [Service]
 Type=simple
-ExecStart=/opt/arklone/src/systemd/scripts/inotify/watch-directory.sh "/opt/arklone/src/systemd/units/arkloned-ppsspp.path" "/SYSTEM/"
+ExecStart=/opt/retropie/supplementary/arklone/src/systemd/scripts/inotify/watch-directory.sh "/opt/retropie/supplementary/arklone/src/systemd/units/arkloned-ppsspp.path" "/SYSTEM/"
 
 [Install]
 WantedBy=multi-user.target
@@ -170,10 +170,6 @@ arkloned-ppsspp.path
 
 Since `rclone` is capable of recursing an entire directory, this script scans the [systemd/units](/systemd/units) directory for "root" path units only (files ending in `.path` or `.auto.path`, but not `sub.auto.path`) and syncs each corresponding directory. (The `.sub.auto.path` units only exist because systemd is not capable of recursively watching a directory, so these units do not need to be utilized by this script. See [Create Path Units from a Directory](#create-path-units-from-a-directory) and [newPathUnitsFromDir](/systemd/scripts/functions/newPathUnitsFromDir.sh) for how `.auto.path` and `.sub.auto.path` units are generated.)
 
-## send-arkos-backup.sh ##
-
-[send-arkos-backup.sh](/rclone/scripts/send-arkos-backup.sh) runs the ArkOS backup script, and then sends it to the cloud remote, storing it in its own directory, `ArkOS/`.
-
 &nbsp;
 
 ---
@@ -192,7 +188,7 @@ To access `${ARKLONE[@]}` in your script, `source` config.sh:
 
 ```shell
 #!/bin/bash
-source "/opt/arklone/src/config.sh"
+source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 # Echo the logfile path
 echo "${ARKLONE[log]}"
@@ -210,7 +206,7 @@ If your script can run directly from the command line, *or* `source`d in another
 ```shell
 #!/bin/bash
 # Only source config.sh if "${ARKLONE[@]} is unpopulated"
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 echo "Good morning! Let's eat ${ARKLONE[food]} for breakfast."
 ```
@@ -222,7 +218,7 @@ echo "Good morning! Let's eat ${ARKLONE[food]} for breakfast."
 ```shell
 #!/bin/bash
 # Load ${ARKLONE[@]}
-source "/opt/arklone/src/config.sh"
+source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 # Do morning routine
 if [[ "${ARKLONE[remote]}" = "dropbox" ]]; then
@@ -264,7 +260,7 @@ some_setting = "true"
 
 ```shell
 #!/bin/bash
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 echo "User set some_setting to "${ARKLONE[some_setting]}"
 ```
@@ -281,7 +277,7 @@ echo "User set some_setting to "${ARKLONE[some_setting]}"
 
 ```shell
 #!/bin/bash
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t loadConfig)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/loadConfig.sh"
 
 # Create an array to store some values
@@ -298,7 +294,7 @@ echo "${MY_CONFIG[foo]}"
 
 ```shell
 #!/bin/bash
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t editConfig)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/editConfig.sh"
 
 editConfig "bar" "false" "/path/to/myconfig.cfg"
@@ -321,7 +317,7 @@ Path units can be generated with [newPathUnit](systemd/scripts/functions/newPath
 
 ```shell
 #!/bin/bash
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t newPathUnit)" = "function" ]] || source "${ARKLONE[installDir]}/src/systemd/scripts/functions/newPathUnit.sh"
 
 newPathUnit "retroarch-saves" "/home/user/.config/retroarch/saves" "retroarch/saves" "retroarch-savefile"
@@ -333,7 +329,7 @@ Multiple path units can be made from a directory and a specified depth of subdir
 
 ```shell
 #!/bin/bash
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t newPathUnitsFromDir)" = "function" ]] || source "${ARKLONE[installDir]}/src/systemd/scripts/functions/newPathUnitsFromDir.sh"
 
 newPathUnitsFromDir "/path/to/roms" "retroarch/roms" 1 true "retroarch-savefile|retroarch-savestate" "/path/to/list-of-dirs-to.ignore"
@@ -351,7 +347,7 @@ newPathUnitsFromDir "/path/to/roms" "retroarch/roms" 1 true "retroarch-savefile|
 
 ```shell
 #!/bin/bash
-source "/opt/arklone/src/config.sh"
+source "/opt/retropie/supplementary/arklone/src/config.sh"
 source "${ARKLONE[installDir]}/src/functions/killOnKeyPress.sh"
 
 killOnKeyPress "/path/to/my/script.sh"
@@ -366,7 +362,7 @@ killOnKeyPress "/path/to/my/script.sh"
 [oga_controls](/vendor/oga_controls) ([source](https://github.com/christianhaitian/oga_controls)) converts gamepad input to key codes and mouse input data. [A wrapper script](/dialogs/input-listener.sh) is provided to automatically detect the input device and execute a command passed to it.
 
 ```shell
-/opt/arklone/src/dialogs/input-listener.sh "/path/to/my/script.sh"
+/opt/retropie/supplementary/arklone/src/dialogs/input-listener.sh "/path/to/my/script.sh"
 ```
 
 &nbsp;
@@ -381,7 +377,7 @@ To use arklone's logger, run [arkloneLogger](functions/arkloneLogger.sh). All st
 
 ```shell
 #!/bin/bash
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t arkloneLogger)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/arkloneLogger.sh"
 
 arkloneLogger "${ARKLONE[log]}"

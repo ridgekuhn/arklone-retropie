@@ -3,7 +3,7 @@
 # by ridgek
 # Released under GNU GPLv3 license, see LICENSE.md.
 
-source "/opt/arklone/src/config.sh"
+source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 # Test uninstaller
 # @param $1 {boolean} Keep install dir if true
@@ -28,34 +28,10 @@ echo "TEST 1 passed."
 ########
 # TEST 2
 ########
-# Original rclone.conf was restored
-[[ -f "${HOME}/.config/rclone/rclone.conf" ]] || exit 72
-
-if file "${HOME}/.config/rclone/rclone.conf" | grep "symbolic link"; then
-    exit 78
-fi
-
-echo "TEST 2 passed."
-
-########
-# TEST 3
-########
-# Original backup directory exists
-# @todo ArkOS-specific
-[[ -d "${ARKLONE[backupDir]}" ]] || exit 72
-
-# Backup dir does not contain arklone subdirs
-[[ ! -d "${ARKLONE[backupDir]}/rclone" ]] || exit 78
-
-echo "TEST 3 passed."
-
-########
-# TEST 4
-########
 # arklone user config dir was removed
 [[ ! -d "${ARKLONE[userCfgDir]}" ]] || exit 78
 
-echo "TEST 4 passed."
+echo "TEST 2 passed."
 
 ########
 # TEST 5
@@ -67,7 +43,7 @@ else
     [[ ! -d "${ARKLONE[installDir]}" ]] || exit 78
 fi
 
-echo "TEST 5 passed."
+echo "TEST 3 passed."
 
 ##########
 # TEARDOWN

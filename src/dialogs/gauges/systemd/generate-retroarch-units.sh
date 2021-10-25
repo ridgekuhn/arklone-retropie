@@ -7,18 +7,8 @@
 #
 # Converts output of systemd/scripts/generate-retroarch-units.sh
 # to progress percentage for passing to dialog gauge
-#
-#	IMPORTANT!
-# @todo ArkOS-specific:
-# 	Before calling this script, `pipefail` must be set,
-# 	to pass non-zero exit code from main script through pipe
-#
-# @usage
-#		set -o pipefail
-#		. "${ARKLONE[installDir]}/src/systemd/scripts/generate-retroarch-units.sh" true \
-#			| . "${ARKLONE[installDir]}/src/dialogs/gauges/systemd/generate-retroarch-units.sh"
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 # Array of supported retroarch.cfg settings
 FILETYPES=("savefile" "savestate")

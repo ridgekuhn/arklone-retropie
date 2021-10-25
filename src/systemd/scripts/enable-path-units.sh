@@ -11,7 +11,7 @@
 # To output progress percentage for passing to dialog gauge,
 # @see dialogs/gauges/systemd/enable-path-units.sh
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t isIgnored)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/isIgnored.sh"
 
 # Get all services

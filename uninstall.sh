@@ -3,7 +3,7 @@
 # by ridgek
 # Released under GNU GPLv3 license, see LICENSE.md.
 
-source "/opt/arklone/src/config.sh"
+source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 # Uninstall arklone
 # @param $1 {boolean} Keep install dir if true
@@ -32,31 +32,10 @@ fi
 ########
 # RCLONE
 ########
-# If user already had rclone installed,
-# restore rclone.conf to original state
-if [[ -f "${ARKLONE[userCfgDir]}/.rclone.lock" ]]; then
-    echo "Restoring your rclone settings..."
-
-    cp "${ARKLONE[backupDir]}/rclone/rclone.conf" "${HOME}/.config/rclone/rclone.conf.arklone$(date +%s).bak"
-
-# Else, uninstall rclone
-else
+# Uninstall rclone if installed by arklone
+if [[ ! -f "${ARKLONE[userCfgDir]}/.rclone.lock" ]]; then
     sudo dpkg -P rclone
-fi
-
-rm "${HOME}/.config/rclone/rclone.conf"
-mv "${ARKLONE[backupDir]}/rclone/rclone.conf" "${HOME}/.config/rclone/rclone.conf"
-
-############
-# FILESYSTEM
-############
-# Remove user-accessible backup dir if it did not exist on install
-if [[ ! -f "${ARKLONE[userCfgDir]}/.backupDir.lock" ]]; then
-    rm -rf "${ARKLONE[backupDir]}"
-
-# Else, only remove the directories created by arklone
-else
-    rm -rf "${ARKLONE[backupDir]}/rclone"
+    rm -rf "${HOME}/.config/rclone"
 fi
 
 #########

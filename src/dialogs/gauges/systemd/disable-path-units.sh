@@ -15,7 +15,7 @@
 #		. "${ARKLONE[installDir]}/src/systemd/scripts/disable-path-units.sh" 3>&1 1>/dev/null 2>&3 \
 #			| . "${ARKLONE[installDir]}/src/dialogs/screens/gauges/disable-path-units.sh"
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 ENABLED_UNITS=(${ARKLONE[enabledUnits]})
 TOTAL_UNITS=${#ENABLED_UNITS[@]}

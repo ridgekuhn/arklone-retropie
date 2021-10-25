@@ -12,7 +12,7 @@
 #		. "${ARKLONE[installDir]}/src/systemd/scripts/disable-path-units.sh" \
 #			| . "${ARKLONE[installDir]}/src/dialogs/screens/gauges/disable-path-units.sh"
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 # Get array of all retroarch.cfg instances
 RETROARCHS=(${ARKLONE[retroarchCfg]})

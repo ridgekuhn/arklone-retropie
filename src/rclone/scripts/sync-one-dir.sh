@@ -19,7 +19,7 @@
 #
 # @returns rclone exit code
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t arkloneLogger)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/arkloneLogger.sh"
 [[ "$(type -t sendDir)" = "function" ]] || source "${ARKLONE[installDir]}/src/rclone/scripts/functions/sendDir.sh"
 [[ "$(type -t receiveDir)" = "function" ]] || source "${ARKLONE[installDir]}/src/rclone/scripts/functions/receiveDir.sh"

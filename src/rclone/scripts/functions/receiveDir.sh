@@ -3,7 +3,7 @@
 # by ridgek
 # Released under GNU GPLv3 license, see LICENSE.md.
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t getFilterString)" = "function" ]] || source "${ARKLONE[installDir]}/src/rclone/scripts/functions/getFilterString.sh"
 
 # Receive a directory from rclone remote

@@ -3,7 +3,7 @@
 # by ridgek
 # Released under GNU GPLv3 license, see LICENSE.md.
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t unitExists)" = "function" ]] || source "${ARKLONE[installDir]}/src/systemd/scripts/functions/unitExists.sh"
 
 # Make new systemd path unit
@@ -21,7 +21,7 @@
 #		newPathUnit "retroarch32-savestate" "/path/to/savestates/nes" "retroarch32/nes" "retroarch-savefile|retroarch-savestate"
 #
 #		Creates a new path unit at:
-#		"/opt/arklone/src/systemd/units/arkloned-retroarch32-savestate.path",
+#		"/opt/retropie/supplementary/arklone/src/systemd/units/arkloned-retroarch32-savestate.path",
 #		with service instance template name (unescaped):
 #		"/path/to/savestates/nes@retroarch/nes@retroarch-savefile|retroarch-savestate"
 #
@@ -30,8 +30,8 @@
 #		with remote directory
 #		"retroarch/nes",
 #		using the rclone filters at
-#		"/opt/arklone/src/rclone/filters/retroarch-savefile.filter"
-#		"/opt/arklone/src/rclone/filters/retroarch-savestate.filter"
+#		"/opt/retropie/supplementary/arklone/src/rclone/filters/retroarch-savefile.filter"
+#		"/opt/retropie/supplementary/arklone/src/rclone/filters/retroarch-savestate.filter"
 #
 # @param $1 {string} Name of the new path unit.
 #		Should usually be the name of the remote directory.

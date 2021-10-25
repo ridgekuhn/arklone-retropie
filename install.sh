@@ -3,7 +3,7 @@
 # by ridgek
 # Released under GNU GPLv3 license, see LICENSE.md.
 
-source "/opt/arklone/src/config.sh"
+source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 echo "Now installing arklone cloud sync utility..."
 
@@ -18,25 +18,6 @@ echo "Now installing arklone cloud sync utility..."
 if [[ ! -d "${ARKLONE[userCfgDir]}" ]]; then
     mkdir "${ARKLONE[userCfgDir]}"
     chown "${USER}":"${USER}" "${ARKLONE[userCfgDir]}"
-fi
-
-# Create backup dir from user setting in ${ARKLONE[userCfg]}
-# Should be somewhere easily-accessible for non-Linux users,
-# like a FAT partition or samba share
-# ArkOS default is /roms/backup
-# @todo ArkOS specific
-if [[ ! -d "${ARKLONE[backupDir]}" ]]; then
-    mkdir "${ARKLONE[backupDir]}"
-    chown "${USER}":"${USER}" "${ARKLONE[backupDir]}"
-
-# Create a lock file so we know not to delete on uninstall
-else
-    touch "${ARKLONE[userCfgDir]}/.backupDir.lock"
-fi
-
-if [[ ! -d "${ARKLONE[backupDir]}/rclone" ]]; then
-    mkdir "${ARKLONE[backupDir]}/rclone"
-    chown "${USER}":"${USER}" "${ARKLONE[backupDir]}/rclone"
 fi
 
 ########
@@ -85,23 +66,13 @@ if [[ ! -d "${HOME}/.config/rclone" ]]; then
     chown "${USER}":"${USER}" "${HOME}/.config/rclone"
 fi
 
-# Backup user's rclone.conf and move it to ${ARKLONE[backupDir]}/rclone/
-# @todo ArkOS-specific
+# Backup user's rclone.conf
 if [[ -f "${HOME}/.config/rclone/rclone.conf" ]]; then
-    echo "Backing up and moving your rclone.conf to EASYROMS"
-
     cp "${HOME}/.config/rclone/rclone.conf" "${HOME}/.config/rclone/rclone.conf.arklone$(date +%s).bak"
-
-    # Suppress errors
-    mv "${HOME}/.config/rclone/rclone.conf" "${ARKLONE[backupDir]}/rclone/rclone.conf" 2>/dev/null
+else
+    touch "${HOME}/.config/rclone/rclone.conf"
+    chown "${USER}":"${USER}" "${HOME}/.config/rclone/rclone.conf"
 fi
-
-# Create user-accessible rclone.conf in ${ARKLONE[backupDir]}
-# and symlink it to the default rclone location
-touch "${ARKLONE[backupDir]}/rclone/rclone.conf"
-ln -v -s "${ARKLONE[backupDir]}/rclone/rclone.conf" "${HOME}/.config/rclone/rclone.conf"
-chown "${USER}":"${USER}" "${HOME}/.config/rclone/rclone.conf"
-chown "${USER}":"${USER}" "${ARKLONE[backupDir]}/rclone/rclone.conf"
 
 ###############
 # INOTIFY-TOOLS

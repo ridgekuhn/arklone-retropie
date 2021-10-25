@@ -25,7 +25,7 @@
 # 	Defaults to "$(dirname ${retroarchs[0]})/saves" as parent for savefiles and savestates
 # 	for all instances of retroarch.cfg
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t loadConfig)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/loadConfig.sh"
 [[ "$(type -t editConfig)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/editConfig.sh"
 [[ "$(type -t isIgnored)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/isIgnored.sh"
@@ -35,6 +35,11 @@ RETROARCHS=(${ARKLONE[retroarchCfg]})
 
 # Get path to saves directory
 SAVES_DIR=$([[ ${1} ]] && echo "${1}" || echo "$(dirname "${RETROARCHS[0]}")/saves")
+
+# If run on RetroPie, move into retroarch config dir
+if [[ "${SAVES_DIR}" = "/opt/retropie/configs/all/saves" ]]; then
+    SAVES_DIR="/opt/retropie/configs/all/retroarch/saves"
+fi
 
 for retroarchCfg in ${RETROARCHS[@]}; do
     echo "========================================================================="
@@ -57,11 +62,10 @@ for retroarchCfg in ${RETROARCHS[@]}; do
 
     for contentDir in ${RA_CONTENT_DIRS[@]}; do
         # If ${contentDir} is not empty, and not in global or RetroArch ignore lists
-        # @todo ArkOS-specific
         if \
             [[ ! -z "$(ls -A "${contentDir}")" ]] \
             && ! isIgnored "${contentDir}" "${ARKLONE[ignoreDir]}/global.ignore" \
-            && ! isIgnored "${contentDir}" "${ARKLONE[ignoreDir]}/arkos-retroarch-content-root.ignore"
+            && ! isIgnored "${contentDir}" "${ARKLONE[ignoreDir]}/retropie-retroarch-content-root.ignore"
         then
             # Make a corresponding directory in ${SAVES_DIR}
             saveDir="${SAVES_DIR}/$(basename "${contentDir}")"

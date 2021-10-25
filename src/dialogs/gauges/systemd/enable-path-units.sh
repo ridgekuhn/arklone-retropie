@@ -15,7 +15,7 @@
 #		. "${ARKLONE[installDir]}/src/systemd/scripts/enable-path-units.sh" 3>&1 1>/dev/null 2>&3 \
 #			| . "${ARKLONE[installDir]}/src/dialogs/screens/gauges/enable-path-units.sh"
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 SERVICES=($(find "${ARKLONE[unitsDir]}/"*".service"))
 PATH_UNITS=($(find "${ARKLONE[unitsDir]}/"*".path"))

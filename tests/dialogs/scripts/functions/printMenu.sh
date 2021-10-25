@@ -5,7 +5,7 @@
 
 # @todo Remove this in favor of ${!array[@]} syntax
 
-source "/opt/arklone/src/config.sh"
+source "/opt/retropie/supplementary/arklone/src/config.sh"
 source "${ARKLONE[installDir]}/src/dialogs/scripts/functions/printMenu.sh"
 
 ###########

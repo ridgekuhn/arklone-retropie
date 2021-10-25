@@ -17,7 +17,7 @@
 #		. "${ARKLONE[installDir]}/src/systemd/scripts/generate-retroarch-units.sh" true \
 #			| . "${ARKLONE[installDir]}/src/dialogs/gauges/systemd/generate-retroarch-units.sh"
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 [[ "$(type -t getRootInstanceNames)" = "function" ]] || source "${ARKLONE[installDir]}/src/systemd/scripts/functions/getRootInstanceNames.sh"
 
 INSTANCES=($(getRootInstanceNames))

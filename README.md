@@ -1,6 +1,6 @@
 # arklone #
 
-rclone cloud sync utility for ArkOS
+rclone cloud sync utility for [RetroPie](https://github.com/RetroPie/)
 
 Watches save directories for RetroArch, and select standalone games.
 
@@ -8,7 +8,7 @@ This project offers no warranties or guarantees. Always make extra backup copies
 
 arklone is released under a GNU GPLv3 license. See [LICENSE.md](/LICENSE.md) for more information.
 
-rclone, RetroArch, EmulationStation, and ArkOS are the properties of their respective owners.
+rclone, RetroArch, EmulationStation, and RetroPie are the properties of their respective owners.
 
 ---
 
@@ -32,27 +32,8 @@ rclone, RetroArch, EmulationStation, and ArkOS are the properties of their respe
 
 # Installation #
 
-This module is not yet integrated into ArkOS. See [this pull request](https://github.com/christianhaitian/arkos/pull/126) for updates.
+DO NOT install! This module is a work-in-progress and is currently being converted from the original [ArkOS version](https://github.com/ridgekuhn/arklone-arkos).
 
-To test, install manually by downloading the [installation script](https://github.com/ridgekuhn/arkos/raw/cloudbackups/10092021/install.sh), and run it from a terminal:
-
-```shell
-wget https://github.com/ridgekuhn/arkos/raw/cloudbackups/10092021/install.sh -O installArklone.sh
-chmod a+x installArklone.sh
-./installArklone.sh
-rm ./installArklone.sh
-```
-
-&nbsp;
-
-## Uninstallation ##
-
-```shell
-wget https://github.com/ridgekuhn/arkos/raw/cloudbackups/10092021/uninstall.sh -O uninstallArklone.sh
-chmod a+x uninstallArklone.sh
-./uninstallArklone.sh
-rm ./uninstallArklone.sh
-```
 &nbsp;
 
 ---
@@ -61,16 +42,11 @@ rm ./uninstallArklone.sh
 
 To begin using arklone, you must create an rclone config file. For [most cloud providers](https://rclone.org/remote_setup/), this will involve installing `rclone` to a computer with a web browser, like your desktop or laptop. See the [rclone docs](https://rclone.org/docs/#configure) for more information on how to do this for your specific provider. Make sure you [install the latest version of rclone](https://rclone.org/downloads/), (1.56.2 as of this writing) to your desktop or laptop. *If you use a package manager like `apt`, the repository version will be outdated.*
 
-Once you have completed this process, copy the `rclone.conf` file from your computer to your ArkOS device. Your `rclone.conf` can be located by running:
+Once you have completed this process, copy the `rclone.conf` file from your computer to `~/.config/rclone/rclone.conf` on your RetroPie device. Your `rclone.conf` can be located by running:
 
 ```
 rclone config file
 ```
-
-On your ArkOS SD card, copy `rclone.conf` to:
-`EASYROMS/backup/rclone/rclone.conf` 
-
-If you already had rclone installed on your device, your `rclone.conf` has been moved to EASYROMS for easier access, and symlinked to its original location. arklone will restore the original arrangement if uninstalled.
 
 &nbsp;
 
@@ -118,8 +94,6 @@ eg,
 		Manually send/receive from the cloud remote
 * **Enable/Disable automatic saves sync**
 		Watches directories for changes and syncs them to your selected remote.
-* **Manual backup/sync ArkOS settings**
-		Runs the ArkOS backup script and uploads the file to the selected remote.
 * **Regenerate RetroArch path units**
 		Re-scans for new RetroArch directories to watch and generates path units for them.
 * **View log file**
@@ -169,10 +143,9 @@ This section is for users who wish to have more control over their retroarch.cfg
 
 ## Supported RetroArch Configuration ##
 
-ArkOS includes 64-bit and 32-bit builds of RetroArch.
-The configuration files are stored at
-`/home/ark/.config/retroarch/retroarch.cfg` and
-`/home/ark/.config/retroarch32/retroarch.cfg`.
+RetroPie's RetroArch configuration file is stored at `/opt/retropie/configs/all/retroarch.cfg`.
+
+Since RetroPie allows you to save configuration overrides on a per-system basis, make sure that none of them override the global `retroarch.cfg`.
 
 The following settings are supported:
 
@@ -204,15 +177,6 @@ If both `sort_filetypes_enable = "true"` and `sort_filetypes_by_content_enable =
 eg,
 `/path/to/filetype_directory/nes/FCEUmm/TheLegendOfZelda.srm`
 
-## Known Bugs ##
-
-ArkOS currently contains a bug which prevents systemd path units from watching subdirectories of exFAT partitions. (See [issue #289](https://github.com/christianhaitian/arkos/issues/289).) This means that savefiles/savestates can not be watched (and automatically synced) if `filetypes_in_content_dir = "true"`.
-
-Until this bug is resolved, if you wish to store your saves next to the content, you must manually sync your saves from the arklone dialog.
-
-Since the bug only applies to exFAT partitions, advanced users who really want to use automatic syncing and keep savefiles/savestates in the content directories can re-format the EASYROMS partition to FAT32, ext4, etc and edit the mount entry in `/etc/fstab`.
-
-
 ## Recommended RetroArch Configuration ##
 
 ```
@@ -227,6 +191,8 @@ sort_savestates_enable = "false"
 sort_savestates_by_content_enable = "true"
 ```
 
+Also see [First Run](#first-run).
+
 &nbsp;
 
 ---
@@ -238,7 +204,7 @@ Arklone has a few settings that can be changed by the user, mostly paths where a
 
 ## Resetting to "First Run" State ##
 
-Setting `remote` to an empty string forces the settings dialog to show the "first run" screen again.
+Setting `remote` to an empty string forces the settings dialog to show the [First Run](#first-run) screen again.
 
 &nbsp;
 
@@ -263,6 +229,8 @@ eg,
 ```
 retroarchContentRoot = "/absolute/path/to/retroarchContentRoot"
 ```
+
+RetroPie's default RetroArch Content Root is `~/RetroPie/roms`. We do not recommending changing this setting.
 
 arklone also supports select standalone software and "ports". See the [systemd/units](/systemd/units) for a list, and the [Path Units](/DEVELOPERS.md#path-units) section of the developer docs for more info.
 
@@ -297,7 +265,7 @@ If you change any of the above settings in `retroarch.cfg`, you must also manual
 
 ## Ports, Standalone Apps, or Other Game Saves Not Syncing ##
 
-ArkOS is constantly updated with new apps and ports, and we probably haven't caught up to them yet. Please [create a new issue](https://github.com/ridgekuhn/arklone-arkos/issues) so we can include it in a future update.
+RetroPie supports a variety of standalone apps and ports, and we probably haven't caught up to them yet. Please [create a new issue](https://github.com/ridgekuhn/arklone-arkos/issues) so we can include it in a future update.
 
 
 ## Logging ##
@@ -322,7 +290,7 @@ Contributions are welcome! Please see the [developer docs](/DEVELOPERS.md).
 
 **Linux**
 
-A RetroPie release is planned soon. arklone is written in bash, and relies on tools like `apt`, `dpkg`, and `inotify-tools`. It should theoretically work on any Debian-based distro, as long as your content is organized in the [expected directory hierarchy](#changing-retroarch-content-root). See [Advanced arklone Configuration](#advanced-arklone-configuration) for more info.
+arklone is written in bash, and relies on tools like `apt`, `dpkg`, and `inotify-tools`. It should theoretically work on any Debian-based distro using RetroArch, as long as your content is organized in the [expected directory hierarchy](#changing-retroarch-content-root). See [Advanced arklone Configuration](#advanced-arklone-configuration) for more info. If you are using a Debian-based distro like Ubuntu or Mint, we strongly recommend installing RetroArch via the [RetroPie setup script for PC](https://retropie.org.uk/docs/Debian/). 
 
 **Windows and MacOS**
 

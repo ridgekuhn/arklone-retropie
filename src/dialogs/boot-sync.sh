@@ -11,7 +11,7 @@
 #
 # @returns Exit code of sync-all-saves.sh
 
-[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/arklone/src/config.sh"
+[[ ${#ARKLONE[@]} -gt 0 ]] || source "/opt/retropie/supplementary/arklone/src/config.sh"
 
 [[ "$(type -t killOnKeyPress)" = "function" ]] || source "${ARKLONE[installDir]}/src/functions/killOnKeyPress.sh"
 [[ "$(type -t logScreen)" = "function" ]] || source "${ARKLONE[installDir]}/src/dialogs/screens/logScreen.sh"

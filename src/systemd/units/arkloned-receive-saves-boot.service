@@ -5,8 +5,8 @@ Requires=network-online.target
 # Use plymouth-quit.service because
 # plymouth-quit-wait.service Wants display-manager.service
 After=network-online.target plymouth-quit.service
-# Run before emulationstation, auto-login on tty1, or display-manager starts
-Before=emulationstation.service display-manager.service getty@tty1.service
+# Run before autologin on tty1 or display-manager starts
+Before=display-manager.service getty@tty1.service
 
 [Service]
 Type=oneshot
@@ -19,7 +19,7 @@ TTYVHangup=yes
 # Run on tty2 to override display-manager in ExecStart script
 # Script calls `chvt 2` before executing, and resets with `chvt 1` before exit
 TTYPath=/dev/tty2
-ExecStart=/opt/arklone/src/dialogs/scripts/input-listener.sh "/opt/arklone/src/dialogs/boot-sync.sh"
+ExecStart=/opt/retropie/supplementary/arklone/src/dialogs/scripts/input-listener.sh "/opt/retropie/supplementary/arklone/src/dialogs/boot-sync.sh"
 # Keep process active so arkloned@ services are aware of it
 RemainAfterExit=yes
 

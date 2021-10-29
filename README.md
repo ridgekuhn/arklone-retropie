@@ -32,7 +32,17 @@ rclone, RetroArch, EmulationStation, and RetroPie are the properties of their re
 
 # Installation #
 
-DO NOT install! This module is a work-in-progress and is currently being converted from the original [ArkOS version](https://github.com/ridgekuhn/arklone-arkos).
+This module has been submitted to be included in the RetroPie setup script. See [this pull request](https://github.com/RetroPie/RetroPie-Setup/pull/3421) for updates.
+
+To test:
+
+* Fork the project's [RetroPie-Setup arklone branch](https://github.com/ridgekuhn/RetroPie-Setup/tree/arklone).
+
+or
+
+* Download the [RetroPie module script](https://raw.githubusercontent.com/ridgekuhn/RetroPie-Setup/arklone/scriptmodules/supplementary/arklone.sh) and place in `~/RetroPie-Setup/scriptmodules/supplementary/`.
+
+Then, run the RetroPie setup script, and navigate to Manage Packages -> Manage optional packages -> arklone
 
 &nbsp;
 
@@ -54,7 +64,7 @@ rclone config file
 
 # First Run #
 
-From EmulationStation, navigate to Options -> Cloud Settings
+From EmulationStation, navigate to RetroPie -> Arklone. Or, from the RetroPie setup script, navigate to Configuration/Tools -> arklone or Manage Packages -> Manage optional packages -> arklone.
 
 On first run, you will be greeted by a prompt asking if you'd like to change your RetroArch configurations to the recommended settings.
 

@@ -36,11 +36,6 @@ RETROARCHS=(${ARKLONE[retroarchCfg]})
 # Get path to saves directory
 SAVES_DIR=$([[ ${1} ]] && echo "${1}" || echo "$(dirname "${RETROARCHS[0]}")/saves")
 
-# If run on RetroPie, move into retroarch config dir
-if [[ "${SAVES_DIR}" = "/opt/retropie/configs/all/saves" ]]; then
-    SAVES_DIR="/opt/retropie/configs/all/retroarch/saves"
-fi
-
 for retroarchCfg in ${RETROARCHS[@]}; do
     echo "========================================================================="
     echo "Now editing ${retroarchCfg}"

@@ -44,6 +44,8 @@ or
 
 Then, run the RetroPie setup script, and navigate to Manage Packages -> Manage optional packages -> arklone
 
+*If you are using RetroPie 4.7.1 or older, and have never updated RetroArch, you must do so if you want to use the `sort_savefiles_by_content_enable` and `sort_savestates_by_content_enable` options in retroarch.cfg!*
+
 &nbsp;
 
 ---
